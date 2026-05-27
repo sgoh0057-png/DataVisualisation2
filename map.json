@@ -7,17 +7,12 @@
     "fontSize": 16,
     "font": "sans-serif"
   },
-  "projection": {
-    "type": "mercator"
-  },
+  "projection": {"type": "mercator"},
   "layer": [
     {
       "data": {
-        "url": "victoria_lga.json",
-        "format": {
-          "type": "topojson",
-          "feature": "LGA_POLYGON"
-        }
+        "url": "LGA_POLYGON.json",
+        "format": {"type": "topojson", "feature": "LGA_POLYGON"}
       },
       "mark": {
         "type": "geoshape",
@@ -27,67 +22,31 @@
       }
     },
     {
-      "data": {
-        "url": "facilities_clean.csv"
-      },
+      "data": {"url": "facilities_clean.csv"},
       "mark": {
         "type": "circle",
         "opacity": 0.7
       },
       "encoding": {
-        "longitude": {
-          "field": "Longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "Latitude",
-          "type": "quantitative"
-        },
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
         "color": {
           "field": "Sport",
           "type": "nominal",
           "scale": {
-            "domain": [
-              "AFL",
-              "Soccer",
-              "Cricket",
-              "Tennis",
-              "Basketball",
-              "Netball"
-            ],
-            "range": [
-              "#1f77b4",
-              "#ff7f0e",
-              "#2ca02c",
-              "#9467bd",
-              "#d62728",
-              "#e377c2"
-            ]
+            "domain": ["AFL", "Soccer", "Cricket", "Tennis", "Basketball", "Netball"],
+            "range": ["#1f77b4", "#ff7f0e", "#2ca02c", "#9467bd", "#d62728", "#e377c2"]
           },
           "legend": {
             "title": "Sport",
             "orient": "right"
           }
         },
-        "size": {
-          "value": 8
-        },
+        "size": {"value": 8},
         "tooltip": [
-          {
-            "field": "Facility Name",
-            "type": "nominal",
-            "title": "Facility"
-          },
-          {
-            "field": "Sport",
-            "type": "nominal",
-            "title": "Sport"
-          },
-          {
-            "field": "LGA Name",
-            "type": "nominal",
-            "title": "LGA"
-          }
+          {"field": "Facility Name", "type": "nominal", "title": "Facility"},
+          {"field": "Sport", "type": "nominal", "title": "Sport"},
+          {"field": "LGA Name", "type": "nominal", "title": "LGA"}
         ]
       }
     }
