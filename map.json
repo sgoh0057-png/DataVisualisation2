@@ -1,0 +1,95 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 550,
+  "title": {
+    "text": "Sport Facilities Across Victoria",
+    "fontSize": 16,
+    "font": "sans-serif"
+  },
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "victoria_lga.json",
+        "format": {
+          "type": "topojson",
+          "feature": "LGA_POLYGON"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e8e8e8",
+        "stroke": "white",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "facilities_clean.csv"
+      },
+      "mark": {
+        "type": "circle",
+        "opacity": 0.7
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Latitude",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "Sport",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "AFL",
+              "Soccer",
+              "Cricket",
+              "Tennis",
+              "Basketball",
+              "Netball"
+            ],
+            "range": [
+              "#1f77b4",
+              "#ff7f0e",
+              "#2ca02c",
+              "#9467bd",
+              "#d62728",
+              "#e377c2"
+            ]
+          },
+          "legend": {
+            "title": "Sport",
+            "orient": "right"
+          }
+        },
+        "size": {
+          "value": 8
+        },
+        "tooltip": [
+          {
+            "field": "Facility Name",
+            "type": "nominal",
+            "title": "Facility"
+          },
+          {
+            "field": "Sport",
+            "type": "nominal",
+            "title": "Sport"
+          },
+          {
+            "field": "LGA Name",
+            "type": "nominal",
+            "title": "LGA"
+          }
+        ]
+      }
+    }
+  ]
+}
