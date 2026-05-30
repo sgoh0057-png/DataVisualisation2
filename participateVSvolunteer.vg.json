@@ -1,0 +1,164 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Participation vs volunteers",
+    "subtitle": "Each circle represents one sport",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": {
+    "url": "participationvsvolunteer.csv"
+  },
+
+  "transform": [
+    {
+      "calculate": "toNumber(replace(datum.Totalparticipation, ',', ''))",
+      "as": "Participants"
+    },
+    {
+      "calculate": "toNumber(replace(datum.Totalvolunteer, ',', ''))",
+      "as": "Volunteers"
+    },
+    {
+      "calculate": "datum.Sport == 'Australian football' ? 'Australian\\nfootball' : datum.Sport == 'Football/soccer' ? 'Football\\n/soccer' : datum.Sport",
+      "as": "Label"
+    }
+  ],
+
+  "width": "container",
+  "height": 250,
+
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "opacity": 0.88,
+        "stroke": "white",
+        "strokeWidth": 2
+      },
+
+      "encoding": {
+        "x": {
+          "field": "Participants",
+          "type": "quantitative",
+          "title": "Participants",
+          "axis": {
+            "format": "~s",
+            "gridColor": "#e9e3da",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#555",
+            "titleColor": "#555"
+          }
+        },
+
+        "y": {
+          "field": "Volunteers",
+          "type": "quantitative",
+          "title": "Volunteers",
+          "axis": {
+            "format": "~s",
+            "gridColor": "#e9e3da",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#555",
+            "titleColor": "#555"
+          }
+        },
+
+        "size": {
+          "field": "Volunteers",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "range": [700, 3000]
+          }
+        },
+
+        "color": {
+          "field": "Sport",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Australian football",
+              "Basketball",
+              "Cricket",
+              "Football/soccer",
+              "Netball",
+              "Tennis"
+            ],
+            "range": [
+              "#4E79A7",
+              "#F28E2B",
+              "#E15759",
+              "#76B7B2",
+              "#59A14F",
+              "#EDC948"
+            ]
+          },
+          "legend": null
+        },
+
+        "tooltip": [
+          {
+            "field": "Sport",
+            "type": "nominal"
+          },
+          {
+            "field": "Participants",
+            "type": "quantitative",
+            "title": "Participants",
+            "format": ","
+          },
+          {
+            "field": "Volunteers",
+            "type": "quantitative",
+            "title": "Volunteers",
+            "format": ","
+          }
+        ]
+      }
+    },
+
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "white",
+        "lineBreak": "\n"
+      },
+
+      "encoding": {
+        "x": {
+          "field": "Participants",
+          "type": "quantitative"
+        },
+
+        "y": {
+          "field": "Volunteers",
+          "type": "quantitative"
+        },
+
+        "text": {
+          "field": "Label"
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "transparent",
+    "view": {
+      "stroke": null
+    },
+    "font": "Arial"
+  }
+}

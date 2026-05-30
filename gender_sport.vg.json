@@ -1,0 +1,132 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Gender breakdown by sport",
+    "subtitle": "Share of male and female participants within each sport",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": { "url": "sportamount.csv" },
+
+  "transform": [
+    { "calculate": "toNumber(replace(datum.Males, ',', ''))", "as": "MaleParticipants" },
+    { "calculate": "toNumber(replace(datum.Females, ',', ''))", "as": "FemaleParticipants" },
+    { "fold": ["MaleShare", "FemaleShare"], "as": ["GenderColumn", "Share"] },
+    { "calculate": "datum.GenderColumn == 'MaleShare' ? 'Male' : 'Female'", "as": "Gender" },
+    { "calculate": "datum.Gender == 'Male' ? -datum.Share / 100 : datum.Share / 100", "as": "BarPosition" },
+    { "calculate": "datum.Share + '%'", "as": "ShareLabel" },
+    { "calculate": "datum.Gender == 'Male' ? -datum.Share / 100 - 0.06 : datum.Share / 100 + 0.06", "as": "LabelPosition" },
+    { "calculate": "datum.Gender == 'Male' ? datum.MaleParticipants : datum.FemaleParticipants", "as": "Participants" }
+  ],
+
+  "width": "container",
+  "height": 250,
+
+  "layer": [
+    {
+      "mark": { "type": "bar", "height": 22, "cornerRadius": 2 },
+      "encoding": {
+        "y": {
+          "field": "Sport",
+          "type": "nominal",
+          "sort": ["Australian football", "Cricket", "Basketball", "Football/soccer", "Tennis", "Netball"],
+          "title": null,
+          "axis": {
+            "labelFontSize": 12,
+            "labelColor": "#111",
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "BarPosition",
+          "type": "quantitative",
+          "scale": { "domain": [-1.15, 1.15] },
+          "axis": {
+            "title": null,
+            "values": [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1],
+            "labelExpr": "abs(datum.value * 100) + '%'",
+            "labelFontSize": 11,
+            "labelColor": "#555",
+            "gridColor": "#e9e3da",
+            "gridOpacity": 0.65,
+            "tickColor": "#d8d1c8",
+            "domainColor": "#d8d1c8"
+          }
+        },
+        "color": {
+          "field": "Gender",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Male", "Female"],
+            "range": ["#4E79A7", "#EF6F9F"]
+          },
+          "legend": {
+            "title": null,
+            "orient": "top",
+            "labelFontSize": 11,
+            "labelColor": "#555",
+            "symbolSize": 90
+          }
+        },
+        "tooltip": [
+          { "field": "Sport", "type": "nominal" },
+          { "field": "Gender", "type": "nominal" },
+          { "field": "Share", "type": "quantitative", "title": "Share", "format": ".1f" },
+          { "field": "Participants", "type": "quantitative", "title": "Participants", "format": "," },
+          { "field": "MaleParticipants", "type": "quantitative", "title": "Male participants", "format": "," },
+          { "field": "FemaleParticipants", "type": "quantitative", "title": "Female participants", "format": "," }
+        ]
+      }
+    },
+
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "#333",
+        "tooltip": false
+      },
+      "encoding": {
+        "y": {
+          "field": "Sport",
+          "type": "nominal",
+          "sort": ["Australian football", "Cricket", "Basketball", "Football/soccer", "Tennis", "Netball"]
+        },
+        "x": {
+          "field": "LabelPosition",
+          "type": "quantitative",
+          "scale": { "domain": [-1.15, 1.15] }
+        },
+        "text": { "field": "ShareLabel" },
+        "align": {
+          "condition": { "test": "datum.Gender == 'Male'", "value": "right" },
+          "value": "left"
+        }
+      }
+    }
+  ],
+
+  "resolve": {
+    "scale": { "x": "shared" }
+  },
+
+  "config": {
+    "background": "transparent",
+    "view": { "stroke": null },
+    "font": "Arial",
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    }
+  }
+}

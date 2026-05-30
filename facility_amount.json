@@ -1,0 +1,215 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Facilities by sport",
+    "subtitle": "Share of listed facilities across Victoria",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": {
+    "url": "srv_ifmd_all-facilities-wholeIFMD.csv"
+  },
+
+  "transform": [
+    {
+      "calculate": "datum['Sports Played'] == 'Australian Rules Football' ? 'Australian football' : datum['Sports Played'] == 'Soccer' ? 'Football/soccer' : datum['Sports Played'] == 'Cricket' ? 'Cricket' : datum['Sports Played'] == 'Tennis (Outdoor)' ? 'Tennis' : datum['Sports Played'] == 'Basketball' ? 'Basketball' : datum['Sports Played'] == 'Netball' ? 'Netball' : 'Other'",
+      "as": "Sport"
+    },
+    {
+      "filter": "datum.Sport != 'Other'"
+    },
+    {
+      "filter": "datum.Latitude > -40 && datum.Latitude < -33 && datum.Longitude > 140 && datum.Longitude < 151"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "FacilityCount"
+        }
+      ],
+      "groupby": ["Sport"]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "FacilityCount",
+          "as": "TotalFacilities"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.FacilityCount / datum.TotalFacilities",
+      "as": "Share"
+    },
+    {
+      "calculate": "datum.Sport + '   ' + format(datum.Share, '.0%')",
+      "as": "LegendLabel"
+    }
+  ],
+
+  "hconcat": [
+    {
+      "width": 155,
+      "height": 220,
+
+      "mark": {
+        "type": "arc",
+        "innerRadius": 52,
+        "outerRadius": 92,
+        "stroke": "white",
+        "strokeWidth": 2
+      },
+
+      "encoding": {
+        "theta": {
+          "field": "FacilityCount",
+          "type": "quantitative"
+        },
+
+        "color": {
+          "field": "Sport",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Australian football",
+              "Basketball",
+              "Cricket",
+              "Football/soccer",
+              "Netball",
+              "Tennis"
+            ],
+            "range": [
+              "#4E79A7",
+              "#F28E2B",
+              "#E15759",
+              "#76B7B2",
+              "#59A14F",
+              "#EDC948"
+            ]
+          },
+          "legend": null
+        },
+
+        "order": {
+          "field": "FacilityCount",
+          "type": "quantitative",
+          "sort": "descending"
+        },
+
+        "tooltip": [
+          { "field": "Sport", "type": "nominal" },
+          {
+            "field": "FacilityCount",
+            "type": "quantitative",
+            "title": "Facilities",
+            "format": ","
+          },
+          {
+            "field": "Share",
+            "type": "quantitative",
+            "title": "Share",
+            "format": ".1%"
+          }
+        ]
+      }
+    },
+
+    {
+      "width": 165,
+      "height": 220,
+
+      "layer": [
+        {
+          "mark": {
+            "type": "square",
+            "size": 150,
+            "opacity": 1
+          },
+
+          "encoding": {
+            "y": {
+              "field": "Sport",
+              "type": "nominal",
+              "sort": {
+                "field": "FacilityCount",
+                "order": "descending"
+              },
+              "axis": null
+            },
+
+            "x": { "value": 8 },
+
+            "color": {
+              "field": "Sport",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Australian football",
+                  "Basketball",
+                  "Cricket",
+                  "Football/soccer",
+                  "Netball",
+                  "Tennis"
+                ],
+                "range": [
+                  "#4E79A7",
+                  "#F28E2B",
+                  "#E15759",
+                  "#76B7B2",
+                  "#59A14F",
+                  "#EDC948"
+                ]
+              },
+              "legend": null
+            }
+          }
+        },
+
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#222"
+          },
+
+          "encoding": {
+            "y": {
+              "field": "Sport",
+              "type": "nominal",
+              "sort": {
+                "field": "FacilityCount",
+                "order": "descending"
+              }
+            },
+
+            "x": { "value": 24 },
+
+            "text": {
+              "field": "LegendLabel"
+            }
+          }
+        }
+      ]
+    }
+  ],
+
+  "spacing": 4,
+
+  "config": {
+    "background": "transparent",
+    "view": { "stroke": null },
+    "font": "Arial"
+  }
+}

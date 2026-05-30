@@ -1,0 +1,129 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Weekly sport participation intensity by age",
+    "subtitle": "How frequently different age groups participate in sport",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": {
+    "url": "heatmapsequence.csv"
+  },
+
+  "transform": [
+    {
+      "filter": "datum['Age group'] != null && datum['Age group'] != '' && datum.Frequency != null && datum.Frequency != '' && datum['2025Rate'] != null && datum['2025Rate'] != ''"
+    },
+    {
+      "calculate": "toNumber(replace(datum['2025Rate'], '%', '')) / 100",
+      "as": "RateValue"
+    }
+  ],
+
+  "width": "container",
+  "height": 250,
+
+  "mark": {
+    "type": "rect",
+    "cornerRadius": 4,
+    "stroke": "#ffffff",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "x": {
+      "field": "Frequency",
+      "type": "ordinal",
+      "title": "Times per week",
+      "sort": [
+        "1+ per week",
+        "2+ per week",
+        "3+ per week",
+        "4+ per week",
+        "5+ per week",
+        "6+ per week",
+        "7+ per week"
+      ],
+      "axis": {
+        "labelAngle": -35,
+        "labelFontSize": 10,
+        "titleFontSize": 12,
+        "ticks": false,
+        "domain": false
+      }
+    },
+
+    "y": {
+      "field": "Age group",
+      "type": "ordinal",
+      "title": "Age group",
+      "sort": [
+        "15-17",
+        "18-24",
+        "25-34",
+        "35-44",
+        "45-54",
+        "55-64",
+        "65+"
+      ],
+      "axis": {
+        "labelFontSize": 12,
+        "titleFontSize": 12,
+        "ticks": false,
+        "domain": false
+      }
+    },
+
+    "color": {
+      "field": "RateValue",
+      "type": "quantitative",
+      "title": "Participation",
+      "scale": {
+        "scheme": "oranges"
+      },
+      "legend": {
+        "format": ".0%"
+      }
+    },
+
+    "tooltip": [
+      {
+        "field": "Age group",
+        "type": "nominal"
+      },
+      {
+        "field": "Frequency",
+        "type": "nominal"
+      },
+      {
+        "field": "RateValue",
+        "type": "quantitative",
+        "title": "Participation rate",
+        "format": ".1%"
+      }
+    ]
+  },
+
+  "config": {
+    "background": "transparent",
+
+    "view": {
+      "stroke": null
+    },
+
+    "font": "Arial",
+
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial",
+      "grid": false
+    }
+  }
+}

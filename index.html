@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Victoria's Sports Story</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+  .section-content {
+    max-width: 1500px;
+    width: 100%;
+  }
+
+  .chart-box {
+    max-width: 1500px;
+    width: 100%;
+  }
+
+  .community-three {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1.15fr;
+    gap: 18px;
+  }
+
+  .community-three .chart-panel {
+    min-width: 0;
+    padding: 24px 16px 18px;
+  }
+
+  #community .chart-panel {
+    overflow: visible;
+  }
+
+  #community .vega-embed svg {
+    overflow: visible;
+  }
+</style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-text">
+      <h1>
+        Victoria's<br>
+        <span>sports story</span><br>
+        is bigger than<br>
+        you think.
+      </h1>
+
+      <p>
+        Exploring participation, gender, age and community sport culture
+        across Victoria's six major sports.
+      </p>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="participation" class="section">
+      <aside class="section-label">
+        <h2>01</h2>
+        <p>PARTICIPATION</p>
+
+        <h3>The sport Victorians think dominates.</h3>
+
+        <p class="section-desc">
+          AFL may be our cultural icon, but when it comes to getting on the
+          field, more Victorians choose other sports.
+        </p>
+      </aside>
+
+      <div class="section-content">
+        <div class="chart-box">
+          <div class="chart-row">
+            <div class="chart-panel">
+              <div id="chart1"></div>
+            </div>
+
+            <div class="chart-panel">
+              <div id="chart2"></div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <span class="icon">🏀</span>
+            <span>
+              <strong>Basketball</strong> is Victoria's most-played sport, while
+              <strong>football/soccer and cricket</strong> are among the few sports still growing.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gender" class="section">
+      <aside class="section-label">
+        <h2>02</h2>
+        <p>GENDER</p>
+
+        <h3>Men and women are playing different games.</h3>
+
+        <p class="section-desc">
+          While Victorians love sport, men and women are often playing different games. 
+          Tennis is one of the few sports where participation is relatively balanced.
+        </p>
+      </aside>
+
+      <div class="section-content">
+        <div class="chart-box">
+          <div class="chart-row">
+            <div class="chart-panel">
+              <div id="chart3"></div>
+            </div>
+
+            <div class="chart-panel">
+              <div id="chart4"></div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <span class="icon">🎾</span>
+            <span>
+              <strong>Tennis</strong> is the most gender-balanced sport in Victoria,
+               while netball and cricket sit at opposite ends of the gender divide.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="age" class="section">
+      <aside class="section-label">
+        <h2>03</h2>
+        <p>AGE</p>
+
+        <h3>What happens to sport participation as people age?</h3>
+
+        <p class="section-desc">
+          Sport participation declines with age, but not all sports follow the same path. 
+          While basketball and soccer lose players rapidly, tennis remains popular across every stage of life.
+        </p>
+      </aside>
+
+      <div class="section-content">
+        <div class="chart-box">
+          <div class="chart-row">
+            <div class="chart-panel">
+              <div id="chart5"></div>
+            </div>
+
+            <div class="chart-panel">
+              <div id="chart6"></div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <span class="icon">🌟</span>
+            <span>
+              <strong>Tennis</strong> is the only major sport that maintains strong participation across every age group, including adults aged 65 and over.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="community" class="section">
+      <aside class="section-label">
+        <h2>04</h2>
+        <p>COMMUNITY</p>
+
+        <h3>AFL wins off the field.</h3>
+
+        <p class="section-desc">
+          Participation tells only part of the story.
+          AFL may not have the most players, but it has the strongest volunteer network in Victoria.
+        </p>
+      </aside>
+
+      <div class="section-content">
+        <div class="chart-box">
+          <div class="chart-row community-three">
+            <div class="chart-panel">
+              <div id="chart7"></div>
+            </div>
+
+            <div class="chart-panel">
+              <div id="chart8"></div>
+            </div>
+
+            <div class="chart-panel">
+              <div id="chart9"></div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <span class="icon">🏆</span>
+            <span>
+              <strong>AFL</strong> attracts more volunteers than any other major sport,
+               highlighting its unique role in Victoria's community sporting culture.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="map" class="section">
+      <aside class="section-label">
+        <h2>05</h2>
+        <p>ACROSS VICTORIA</p>
+    
+        <h3>Sport reaches every corner of Victoria.</h3>
+    
+        <p class="section-desc">
+         Sport reaches every corner of Victoria, but some sports leave a larger footprint than others. Cricket facilities are the most widespread across the state, appearing in both metropolitan and regional communities.
+        </p>
+      </aside>
+    
+      <div class="map-box">
+        <div id="mapChart"></div>
+      </div>
+    </section>
+
+    <section id="conclusion" class="section">
+      <aside class="section-label">
+        <h2>06</h2>
+        <p>CONCLUSION</p>
+    
+        <h3>Sport is more than just a game.</h3>
+    
+        <p class="section-desc">
+          Victoria's sporting culture is shaped by participation, gender, age,
+          volunteering and local facilities.
+        </p>
+      </aside>
+    
+      <div class="section-content">
+        <div class="conclusion-box">
+          <p class="conclusion-kicker">THE BIG PICTURE</p>
+    
+          <h2>
+            Sport is not just played in Victoria —
+            <span>it helps define Victoria.</span>
+          </h2>
+    
+          <p>
+            From basketball's high participation to AFL's volunteer strength,
+            tennis' lifelong appeal and cricket's wide facility footprint,
+            sport connects people across communities in different ways.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer id="data">
+      <p>
+        <strong>Data Sources</strong><br>
+        AusPlay Victoria Data Tables, Sport Australia,2025.<br>
+        AusPlay Victoria Data Tables, Sport Australia,2024.<br>
+        Sport and Recreation Facilities list – Integrated Facility Management Database, 2024.<br>
+        Photo: Damien Tait / Unsplash
+      </p>
+
+      <p>
+        Created by Syn Yu Goh · FIT2179 Data Visualisation · Monash University · 2026
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    const options = {
+      actions: false,
+      renderer: "svg"
+    };
+
+    vegaEmbed("#chart1", "EstimateParticipation.vg.json", options);
+    vegaEmbed("#chart2", "Participate_year.vg.json", options);
+    vegaEmbed("#chart3", "gender_sport.vg.json", options);
+    vegaEmbed("#chart4", "gender_balance_score.vg.json", options);
+    vegaEmbed("#chart5", "participation_age.vg.json", options);
+    vegaEmbed("#chart6", "sport_frequency.vg.json", options);
+    vegaEmbed("#chart7", "participateVSvolunteer.vg.json", options);
+    vegaEmbed("#chart8", "volunteer_participate.vg.json", options);
+    vegaEmbed("#chart9", "facility_amount.json", options);
+
+    vegaEmbed("#mapChart", "map.vg.json", options);
+  </script>
+
+</body>
+
+</html>

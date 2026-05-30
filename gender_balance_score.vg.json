@@ -1,0 +1,174 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Which sports are most gender-balanced?",
+    "subtitle": "Smaller values indicate a more even participation split",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": {
+    "url": "sportamount.csv"
+  },
+
+  "transform": [
+    {
+      "calculate": "abs(datum.MaleShare - datum.FemaleShare)",
+      "as": "Gap"
+    },
+    {
+      "calculate": "format(datum.Gap, '.0f') + '%'",
+      "as": "GapLabel"
+    },
+    {
+      "calculate": "datum.FemaleShare > datum.MaleShare ? 'Female' : 'Male'",
+      "as": "DominantGender"
+    }
+  ],
+
+  "width": "container",
+  "height": 250,
+
+  "encoding": {
+    "y": {
+      "field": "Sport",
+      "type": "nominal",
+      "sort": {
+        "field": "Gap",
+        "order": "ascending"
+      },
+      "axis": {
+        "title": null,
+        "labelFontSize": 12,
+        "labelColor": "#111",
+        "labelPadding": 8,
+        "ticks": false,
+        "domain": false
+      }
+    },
+    "x": {
+      "field": "Gap",
+      "type": "quantitative",
+      "scale": {
+        "domain": [0, 75]
+      },
+      "axis": {
+        "title": "Gender gap (%)",
+        "grid": true,
+        "labelFontSize": 11,
+        "titleFontSize": 12,
+        "labelColor": "#555",
+        "titleColor": "#555",
+        "gridColor": "#e9e3da",
+        "gridOpacity": 0.65,
+        "tickColor": "#d8d1c8",
+        "domainColor": "#d8d1c8"
+      }
+    },
+    "color": {
+      "field": "DominantGender",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Male", "Female"],
+        "range": ["#4E79A7", "#EF6F9F"]
+      },
+      "legend": {
+        "title": null,
+        "orient": "top",
+        "labelFontSize": 11,
+        "labelColor": "#555",
+        "symbolSize": 90
+      }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "Gap",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 200
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "Sport",
+            "type": "nominal"
+          },
+          {
+            "field": "DominantGender",
+            "type": "nominal",
+            "title": "Dominant gender"
+          },
+          {
+            "field": "MaleShare",
+            "type": "quantitative",
+            "title": "Male %",
+            "format": ".0f"
+          },
+          {
+            "field": "FemaleShare",
+            "type": "quantitative",
+            "title": "Female %",
+            "format": ".0f"
+          },
+          {
+            "field": "Gap",
+            "type": "quantitative",
+            "title": "Gender gap (%)",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dx": 12,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#444",
+        "align": "left"
+      },
+      "encoding": {
+        "text": {
+          "field": "GapLabel"
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "background": "transparent",
+    "view": {
+      "stroke": null
+    },
+    "font": "Arial",
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    }
+  }
+}

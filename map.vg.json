@@ -1,0 +1,109 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "width": "container",
+  "height": 520,
+
+  "title": {
+    "text": "Sport facilities across Victoria",
+    "subtitle": "Use the dropdown to filter facilities by sport",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "params": [
+    {
+      "name": "SportSelect",
+      "value": "All",
+      "bind": {
+        "input": "select",
+        "options": ["All", "Australian football", "Football/soccer", "Cricket", "Tennis", "Basketball", "Netball"],
+        "name": "Select sport: "
+      }
+    }
+  ],
+
+  "projection": {
+    "type": "mercator",
+    "center": [144.8, -36.8],
+    "scale": {"expr": "min(width, 520) * 11"}
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "LGA_POLYGON.json",
+        "format": {
+          "type": "topojson",
+          "feature": "LGA_POLYGON"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e8e8e8",
+        "stroke": "white",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "srv_ifmd_all-facilities-wholeIFMD.csv"
+      },
+      "transform": [
+        {
+          "calculate": "datum['Sports Played'] == 'Australian Rules Football' ? 'Australian football' : datum['Sports Played'] == 'Soccer' ? 'Football/soccer' : datum['Sports Played'] == 'Cricket' ? 'Cricket' : datum['Sports Played'] == 'Tennis (Outdoor)' ? 'Tennis' : datum['Sports Played'] == 'Basketball' ? 'Basketball' : datum['Sports Played'] == 'Netball' ? 'Netball' : 'Other'",
+          "as": "Sport"
+        },
+        { "filter": "datum.Sport != 'Other'" },
+        {
+          "filter": "datum.Latitude > -39.2 && datum.Latitude < -33.9 && datum.Longitude > 140.9 && datum.Longitude < 150.0"
+        },
+        {
+          "filter": "SportSelect == 'All' || datum.Sport == SportSelect"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "size": 22,
+        "stroke": "white",
+        "strokeWidth": 0.3
+      },
+      "encoding": {
+        "longitude": { "field": "Longitude", "type": "quantitative" },
+        "latitude": { "field": "Latitude", "type": "quantitative" },
+        "color": {
+          "field": "Sport",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Australian football", "Basketball", "Cricket", "Football/soccer", "Netball", "Tennis"],
+            "range": ["#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F", "#EDC948"]
+          },
+          "legend": {
+            "title": "Sport",
+            "orient": "bottom-right",
+            "offset": 10,
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "symbolSize": 80
+          }
+        },
+        "tooltip": [
+          {"field": "Facility Name", "type": "nominal", "title": "Facility"},
+          {"field": "Sport", "type": "nominal", "title": "Sport"},
+          {"field": "LGA Name", "type": "nominal", "title": "LGA"}
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "background": "transparent",
+    "view": {"stroke": null}
+  }
+}

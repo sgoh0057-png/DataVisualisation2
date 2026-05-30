@@ -1,0 +1,136 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Participation: the real ranking",
+    "subtitle": "Estimated number of participants aged 15+",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "anchor": "start",
+    "fontWeight": 700,
+    "subtitleColor": "#6f6f6f",
+    "color": "#111",
+    "offset": 12
+  },
+
+  "data": {
+    "url": "sportamount.csv"
+  },
+
+  "transform": [
+    {
+      "calculate": "toNumber(replace(datum['Total#'], ',', ''))",
+      "as": "Participants"
+    },
+    {
+      "calculate": "datum.Sport == 'Australian football' ? '🏈  Australian football' : datum.Sport == 'Basketball' ? '🏀  Basketball' : datum.Sport == 'Cricket' ? '🏏  Cricket' : datum.Sport == 'Football/soccer' ? '⚽  Football/soccer' : datum.Sport == 'Netball' ? '🏐  Netball' : datum.Sport == 'Tennis' ? '🎾  Tennis' : datum.Sport",
+      "as": "SportLabel"
+    },
+    {
+      "calculate": "format(toNumber(replace(datum['Total#'], ',', '')), ',')",
+      "as": "ParticipantsLabel"
+    }
+  ],
+
+  "width": "container",
+  "height": 250,
+
+  "padding": {
+    "left": 8,
+    "right": 20,
+    "top": 8,
+    "bottom": 8
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3,
+        "height": 24
+      },
+      "encoding": {
+        "y": {
+          "field": "SportLabel",
+          "type": "nominal",
+          "sort": { "field": "Participants", "order": "descending" },
+          "title": null,
+          "axis": {
+            "labelFontSize": 12,
+            "labelColor": "#111",
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "Participants",
+          "type": "quantitative",
+          "title": "Participants",
+          "scale": { "domain": [0, 380000] },
+          "axis": {
+            "format": "~s",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#555",
+            "titleColor": "#555",
+            "gridColor": "#e9e3da",
+            "gridOpacity": 0.65,
+            "tickColor": "#d8d1c8",
+            "domainColor": "#d8d1c8"
+          }
+        },
+        "color": {
+          "field": "Sport",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Australian football", "Basketball", "Cricket", "Football/soccer", "Netball", "Tennis"],
+            "range": ["#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F", "#EDC948"]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          { "field": "Sport", "type": "nominal" },
+          { "field": "Participants", "type": "quantitative", "title": "Participants", "format": "," }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "color": "#333"
+      },
+      "encoding": {
+        "y": {
+          "field": "SportLabel",
+          "type": "nominal",
+          "sort": { "field": "Participants", "order": "descending" }
+        },
+        "x": {
+          "field": "Participants",
+          "type": "quantitative",
+          "scale": { "domain": [0, 380000] }
+        },
+        "text": { "field": "ParticipantsLabel" },
+        "tooltip": [
+          { "field": "Sport", "type": "nominal" },
+          { "field": "Participants", "type": "quantitative", "title": "Participants", "format": "," }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "background": "transparent",
+    "view": { "stroke": null },
+    "font": "Arial",
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    }
+  }
+}
